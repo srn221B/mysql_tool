@@ -13,6 +13,10 @@ Demo with user(username : user, password : password, host : localhost) in mysql.
 * Show_DB.sh  
 A tool that allows you to easily view the database.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_DB.gif)  
+* Show_Table.sh
+A tool that allows you to easily view tables of selected database.  
+In the demo, database1 is selected.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table.gif)  
 
 ## Author
 shimoyama
