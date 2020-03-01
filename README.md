@@ -21,6 +21,10 @@ In the demo, database1 is selected.
 A tool that allows you to easily display information about tables in the selected database.  
 In the demo, table1 is selected.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table_Inf.gif)  
+* Show_Table_Data.sh  
+A tool that allows you to easily display data about tables in the selected database.  
+In the demo, table1 is selected.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table_Data.gif)  
 
 
 ## Author
