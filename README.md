@@ -17,6 +17,11 @@ A tool that allows you to easily view the database.
 A tool that allows you to easily view tables of selected database.  
 In the demo, database1 is selected.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table.gif)  
+* Show_Table_Inf.sh  
+A tool that allows you to easily display information about tables in the selected database.  
+In the demo, table1 is selected.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table_Inf.gif)  
+
 
 ## Author
 shimoyama
