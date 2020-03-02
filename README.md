@@ -21,18 +21,25 @@ In the demo, database1 is selected.
 A tool that allows you to easily display information about tables in the selected database.  
 In the demo, table1 is selected.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table_Inf.gif)  
+  
 * Show_Table_Data.sh  
 A tool that allows you to easily display data about tables in the selected database.  
 In the demo, table1 is selected.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Show_Table_Data.gif)  
 * Delete.sh  
-A tool that can to create a file that can easily delete rows in a table as "test.sql".  
+A tool that can to create a file that can easily delete rows in a table.  
 In the demo, create a file to delete rows where the value of "table column" is "test4".  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/delete.gif)  
-* Insert.sh
-A tool that can to create a file that can easily insert rows in a table as "test.sql".  
+* Insert.sh  
+A tool that can to create a file that can easily insert rows in a table.  
 In the demo, create a file to insert rows into the "table2".  
-![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/insert.gif)
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/insert.gif)  
+* Update.sh
+A tool that can to create a file that can easily update rows in a table.  
+In the demo, create a file to update rows.  
+table_column:test100,table_column2:100 → table_column:test100,table_column2:300  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/update.gif)  
+
 
 ## Author
 shimoyama
