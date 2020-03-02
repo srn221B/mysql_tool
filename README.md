@@ -29,7 +29,10 @@ In the demo, table1 is selected.
 A tool that can to create a file that can easily delete rows in a table as "test.sql".  
 In the demo, create a file to delete rows where the value of "table column" is "test4".  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/delete.gif)  
-
+* Insert.sh
+A tool that can to create a file that can easily insert rows in a table as "test.sql".  
+In the demo, create a file to insert rows into the "table2".  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/insert.gif)
 
 ## Author
 shimoyama
