@@ -43,7 +43,10 @@ table_column:test100,table_column2:100 → table_column:test100,table_column2:30
 A tool that can to create a file that can easily innner join table.  
 In the demo, join table1 and table2 with table_column.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/innner_join.gif)  
-
+* Join.sh  
+A tool that can to create a file that can easily outer join table.  
+In the demo, left outer join table1 and table2 with table_column.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/join.gif)  
 
 ## Author
 shimoyama

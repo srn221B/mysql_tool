@@ -35,14 +35,14 @@ Change(){
 Account(){
 	local file=".my.cnf"
 	local login_user
-	if [ ! -e $file ]
+	if [ ! -e $file ];
 	then
 		Change
 	fi
 	echo "/* ログインユーザー */"
 	cat $file | grep 'user = ' | awk '{print $3}'
 	read -p"ユーザー名を指定[変更:change] : " login_user </dev/tty
-	if [ "$login_user" = "change" ]
+	if [ "$login_user" = "change" ];
 	then
 		Change
 		Account
@@ -73,7 +73,7 @@ Show_DB(){
 	local file=".my.cnf"
 	local ret
 	ret=`mysql --defaults-extra-file=./$file -u $USER -e "show databases;"`
-	if [ $? -gt 0 ]
+	if [ $? -gt 0 ];
 	then
 		exit 0
 	fi
@@ -87,8 +87,8 @@ Show_Table(){
 	local file=".my.cnf"
 	local ret
 	ret=`mysql --defaults-extra-file=./$file -u $USER -e "use $1;show tables;"`
-	if [ $? -gt 0 ];
-       	then
+	if [ $? -gt 0 ]
+	then
 		echo "存在しないデータベース名です"
 		echo "最初からやり直してください"
 		exit 1
@@ -105,14 +105,13 @@ Show_Table(){
 	unset ARRAY[0]
 	Show_array
 }
-
 #存在するテーブル名かチェック(引数:データベース名,テーブル名)
 Check_table(){
 	local ret
 	local file=".my.cnf"
 	ret=`mysql --defaults-extra-file=./$file -u $USER -e "use $1;select * FROM $2;"`
         if [ $? -gt 0 ]
-       	then
+	then
                 echo "存在しないテーブル名です"
                 echo "最初からやり直してください"
                 exit 1
@@ -131,20 +130,21 @@ Check_colum(){
         fi
 }
 
-#テーブル情報を返す(引数:データベース名 テーブル名)
+#テーブル情報を返す(引数:データベース名 テーブル名 他)
 Show_TableInf(){
 	local file=".my.cnf"
 	local ret
 	echo "/* $2テーブルの列情報 */"
-	mysql --defaults-extra-file=./$file -u $USER -e "use $1;SHOW COLUMNS FROM $2"
+	mysql --defaults-extra-file=./$file -u $USER -e "use $1;SHOW COLUMNS FROM $2;"
 }
 #テーブルデータを返す(引数:データベース名 テーブル名)
 Show_TableData(){
 	local file=".my.cnf"
 	local ret
 	echo "/* $2テーブルデータ一覧 */"
-	mysql --defaults-extra-file=./$file -u $USER -e "use $1;SELECT * FROM $2"
+	mysql --defaults-extra-file=./$file -u $USER -e "use $1;SELECT * FROM $2;"
 }
+
 
 #配列の中身を１要素目削除し縦に表示
 Show_array(){
@@ -154,19 +154,14 @@ Show_array(){
 		echo "*** ${e}"
 	done
 }
-#ファクトテーブル結合関数(引数:DB名)
-Fact_JOIN(){
+#結合項目関数（引数：データベース名、結合テーブル名）
+JOIN_table(){
 	local table
 	Show_Table $1
 	read -p "メインテーブルを入力：" table </dev/tty
 	Check_table $1 $table
 	Targ_Colum $1 $table
 	TABLE+=($table)
-	echo
-}
-#ディメンションテーブル結合関数(引数：DBを名）
-Dimantion_JOIN(){
-	local table
 	Show_Table $1
 	read -p "結合テーブルを入力[終了：q]：" table </dev/tty
 	while [ "$table" != "q" ]
@@ -179,7 +174,6 @@ Dimantion_JOIN(){
 		read -p "結合テーブルを入力[終了:q]：" table </dev/tty
 		echo
 	done
-
 	if [ ${#TABLE[@]} -eq 1 ]
 	then
 		echo "結合テーブル１つ以上は必要です"
@@ -189,11 +183,12 @@ Dimantion_JOIN(){
 }
 #結合項目関数(引数：データベース名、結合テーブル名）
 Join_Colum(){
-	local F="${TABLE[0]}"
-	local D="$2"
+	local i=$(( ${#TABLE[@]} - 1 ))
+	local F="${TABLE[i]}"
+	local D=$2
 	local colum
 	Show_TableInf $1 $F
-	Show_TableInf $1 $D
+	Show_TableInf $1 $2
 	read -p "${F}テーブル結合項目名：" colum
 	Check_colum $1 $F $colum
 	JOIN_COLUM+=("$F.$colum")
@@ -201,46 +196,43 @@ Join_Colum(){
 	Check_colum $1 $D $colum
 	JOIN_COLUM+=("$D.$colum")
 }
-#結合条件関数(引数：データベース名、結合テーブル名）
-Targ_Colum(){
-	local colum
-	Show_TableData $1 $2
-	read -p "${2}テーブル結合条件項目名[無し/終了:q]：" colum
-	while [ "$colum" != "q" ]
-	do
-		Check_colum $1 $2 $colum
-		TARG_COLUM+=($2)
-		TARG_COLUM+=($colum)
-		read -p "${2}テーブル結合条件項目内容：" colum
-		TARG_COLUM+=($colum)
-		read -p "${2}テーブル結合条件項目名[無し/終了:q]：" colum
-	done
-}
+
 #抽出項目を決める(引数：データーベース名)
-FACT_COLUM(){
+COLUM(){
 	local table
 	local colum
 	local cname
-	table="${TABLE[0]}"
-	Show_TableInf $1 $table
-	echo "集合関数は直接入力"
-	read -p "${table}テーブル抽出項目名[終了:q]：" colum
-	#テーブル内の表示項目を決める
-	while [ "$colum" != "q" ]
+	local i=0
+	local e
+	for e in "${TABLE[@]}"
 	do
-		#集合関数分別
-		if [ "`echo $colum | grep "("`" == "$colum" ]
-		then
-			AGG_COLUM+=("$table.$colum")
-			read -p "${colum}項目の表示名[項目名と同一:q]：" cname
-			AGG_COLUM+=($cname)
-		else
-			Check_colum $1 $table $colum
-			SHOW_COLUM+=("$table.$colum")
-			read -p "${colum}項目の表示名[項目名と同一:q]：" cname
-			SHOW_COLUM+=($cname)
-		fi
+		table="${TABLE[i]}"
+		echo "テーブルテスト ${table}"
+		Show_TableInf $1 $table
+		echo "集合関数は直接入力"
 		read -p "${table}テーブル抽出項目名[終了:q]：" colum
+		#テーブル内の表示項目を決める
+		while [ "$colum" != "q" ]
+		do
+			#集合関数分別
+			if [ "`echo $colum | grep "("`" == "$colum" ]
+			then
+				AGG_COLUM+=("$table.$colum")
+				read -p "${colum}項目の表示名[項目名と同一:q]：" cname
+				AGG_COLUM+=($cname)
+			else
+				Check_colum $1 $table $colum
+				SHOW_COLUM+=("$table.$colum")
+				read -p "${colum}項目の表示名[項目名と同一:q]：" cname
+				SHOW_COLUM+=($cname)
+			fi
+			read -p "${table}テーブル抽出項目名[終了:q]：" colum
+		done
+		let i++
+		if [ $i -eq ${#TABLE[@]} ]
+		then
+			break
+		fi
 	done
 	#抽出項目判定
 	if [ ${#SHOW_COLUM[@]} -eq 0 ] && [ ${#AGG_COLUM[@]} -eq 0 ]
@@ -250,33 +242,19 @@ FACT_COLUM(){
 		exit 1
 	fi
 }
-
-#抽出項目を決める(引数：データーベース名)
-DIMANTION_COLUM(){
-	local table
+#結合条件関数(引数：データベース名、結合テーブル名）
+Targ_Colum(){
 	local colum
-	local cname
-	local i=1
-	local e
-	for e in "${TABLE[@]}"
+	Show_TableData $1 $2
+	read -p "$2テーブル結合条件項目名[無し/終了:q]：" colum
+	while [ "$colum" != "q" ]
 	do
-		table="${TABLE[i]}"
-		Show_TableInf $1 $table
-		read -p "${table}テーブル抽出項目名[終了:q]：" colum
-		#テーブル内の表示項目を決める
-		while [ "$colum" != "q" ]
-		do
-			Check_colum $1 $table $colum
-			SHOW_COLUM+=("$table.$colum")
-			read -p "${colum}項目の表示名[項目名と同一:q]：" cname
-			SHOW_COLUM+=($cname)
-			read -p "${table}テーブル抽出項目名[終了:q]：" colum
-		done
-		let i++
-		if [ $i -eq ${#TABLE[@]} ]
-		then
-			break
-		fi
+		Check_colum $1 $2 $colum
+		TARG_COLUM+=($2)
+		TARG_COLUM+=($colum)
+		read -p "$2テーブル結合条件項目内容：" colum
+		TARG_COLUM+=($colum)
+		read -p "$2テーブル結合条件項目名[無し/終了:q]：" colum
 	done
 }
 #SQLをつくる(引数：データベース名）
@@ -321,8 +299,6 @@ Create_sql(){
 }
 #selectとgroupをつくる
 SQL_1(){
-	SELECT="SELECT"
-	#抽出項目
 	local e
 	local i=0
 	for e in "${SHOW_COLUM[@]}"
@@ -383,7 +359,7 @@ SQL_1(){
 		fi
 	done
 }
-#innerjoinをつくる
+#joinをつくる
 SQL_2(){
 	local e
 	local i=0
@@ -393,9 +369,9 @@ SQL_2(){
 	do
 		if [ $i -eq 0 ]
 		then
-			JOIN="INNER JOIN ${TABLE[j]} ON ${JOIN_COLUM[i]} = ${JOIN_COLUM[i+1]}"
+			JOIN="$JOIN_SELECT ${TABLE[j]} ON ${JOIN_COLUM[i]} = ${JOIN_COLUM[i+1]}"
 		else
-			JOIN="$JOIN\nINNER JOIN ${TABLE[j]} ON ${JOIN_COLUM[i]} = ${JOIN_COLUM[i+1]}"
+			JOIN="$JOIN\n$JOIN_SELECT ${TABLE[j]} ON ${JOIN_COLUM[i]} = ${JOIN_COLUM[i+1]}"
 		fi
 		i=$(( $i + 2 ))
 		let j++
@@ -425,18 +401,32 @@ SQL_3(){
 		fi
 	done
 }
+#JOIN選ぶ
+Join(){
+	local select
+	echo -e "\n結合の種類を選んでください"
+	echo "内部結合 : 1"
+	echo "左外部結合 : 2"
+	read -p "結合の種類：" select </dev/tty
+	case "$select" in
+		"1" ) JOIN_SELECT="INNER JOIN";;
+		"2" ) JOIN_SELECT="LEFT OUTER JOIN";;
+		* ) echo -e "存在しない選択です。\n最初からやり直してください。"
+			exit 0;;
+	esac
+	echo
+}
 
-echo "SQLファイルを新規作成(INNERJOIN)"
+echo "SQLファイルを新規作成(結合文)"
 read -p "ファイル名を入力 : " SQLFILE </dev/tty
 File $SQLFILE
+Join
 Account
 Connect
 Show_DB
 read -p "データベース名を入力：" Show_DB </dev/tty
-Fact_JOIN $Show_DB
-Dimantion_JOIN $Show_DB
-FACT_COLUM $Show_DB
-DIMANTION_COLUM $Show_DB
+JOIN_table $Show_DB
+COLUM $Show_DB
 Create_sql $Show_DB
 echo "--------------------"
 echo "ファイル名：$SQLFILE"
