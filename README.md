@@ -34,12 +34,19 @@ In the demo, create a file to delete rows where the value of "table column" is "
 A tool that can to create a file that can easily insert rows in a table.  
 In the demo, create a file to insert rows into the "table2".  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/insert.gif)  
-* Update.sh
+* Update.sh  
 A tool that can to create a file that can easily update rows in a table.  
 In the demo, create a file to update rows.  
 table_column:test100,table_column2:100 → table_column:test100,table_column2:300  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/update.gif)  
-
+* Inner_join.sh  
+A tool that can to create a file that can easily innner join table.  
+In the demo, join table1 and table2 with table_column.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/innner_join.gif)  
+* Join.sh  
+A tool that can to create a file that can easily outer join table.  
+In the demo, left outer join table1 and table2 with table_column.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/join.gif)  
 
 ## Author
 shimoyama
