@@ -47,6 +47,10 @@ In the demo, join table1 and table2 with table_column.
 A tool that can to create a file that can easily outer join table.  
 In the demo, left outer join table1 and table2 with table_column.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/join.gif)  
+  
+* CSV_Insert.sh  
+A tool to convert CSV file to INSERT statement.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/CSV_Insert.gif)
 
 ## Author
 shimoyama
