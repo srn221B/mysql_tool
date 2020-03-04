@@ -51,6 +51,10 @@ In the demo, left outer join table1 and table2 with table_column.
 * CSV_Insert.sh  
 A tool to convert CSV file to INSERT statement.  
 ![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/CSV_Insert.gif)
+* Create_csv.sh  
+A tool to easily create CSV file.  
+![demo](https://raw.githubusercontent.com/wiki/srn221B/mysql_tool/image/Create_csv.gif)
+
 
 ## Author
 shimoyama
